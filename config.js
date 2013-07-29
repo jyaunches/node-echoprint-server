@@ -2,6 +2,21 @@
  * Configuration variables. These can be overridden in the per-system config file 
  */
 
+
+//var herokuDbURL = process.env.CLEARDB_DATABASE_URL);
+
+var url = process.env.CLEARDB_DATABASE_URL;
+
+var settings = {}
+
+if(url != null){
+    var host = url.split('@')[1].split('?')[0].split('/')[0]
+    var db_name = url.split('@')[1].split('?')[0].split('/')[1]
+
+    var username = url.split('@')[0].replace('mysql://', '').split(':')[0]
+    var pswd = url.split('@')[0].replace('mysql://', '').split(':')[1]
+}
+
 var log = require('winston');
 
 var settings = {
@@ -9,10 +24,10 @@ var settings = {
   web_port: 37760,
   
   // Database settings
-  db_user: 'root',
-  db_pass: '',
-  db_database: 'echoprint',
-  db_host: 'localhost',
+  db_user: username || 'root',
+  db_pass: pswd || '',
+  db_database: db_name || 'echoprint',
+  db_host: host ||'localhost',
   
   // Set this to a system username to drop root privileges
   run_as_user: '',
@@ -30,20 +45,6 @@ var settings = {
   codever: '4.12'
 };
 
-// Override default settings with any local settings
-try {
-  var localSettings = require('./config.local');
-  
-  for (var property in localSettings) {
-    if (localSettings.hasOwnProperty(property))
-      settings[property] = localSettings[property];
-  }
-  
-  log.info('Loaded settings from config.local.js. Database is ' +
-    settings.db_database + '@' + settings.db_host);
-} catch (err) {
-  log.warn('Using default settings from config.js. Database is ' +
-    settings.db_database + '@' + settings.db_host);
-}
+log.warn('Database is ' + settings.db_database + '@' + settings.db_host);
 
 module.exports = settings;

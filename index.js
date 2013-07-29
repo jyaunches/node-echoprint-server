@@ -5,10 +5,6 @@ var log = require('winston');
 var config = require('./config');
 var server = require('./server');
 
-
-log.info('PRINTING CLEARDB_DATABASE_URL--------------------------------');
-log.info(process.env.CLEARDB_DATABASE_URL);
-
 // Make sure we have permission to bind to the requested port
 if (config.web_port < 1024 && process.getuid() !== 0)
   throw new Error('Binding to ports less than 1024 requires root privileges');
