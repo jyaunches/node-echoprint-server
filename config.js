@@ -21,7 +21,7 @@ var log = require('winston');
 
 var settings = {
   // Port that the web server will bind to
-  web_port: 37760,
+  web_port: 3306,
   
   // Database settings
   db_user: username || 'root',
